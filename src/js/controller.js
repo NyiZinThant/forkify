@@ -12,6 +12,8 @@ const controlRecipe = async function () {
     const hash = window.location.hash.slice(1);
     if (!hash) return;
     recipeView.renderSpinner();
+    // update result
+    resultsView.update(modal.getSearchResultsPage());
     // load recipe
     await modal.loadRecipe(hash);
     // render recipe
@@ -36,9 +38,17 @@ const controlPagination = function (goToPage) {
   resultsView.render(modal.getSearchResultsPage(goToPage));
   paginationView.render(modal.state.search);
 };
+const controlServings = function (newServings) {
+  // update recipe servings
+  modal.updateServings(newServings);
+  // update recipe view
+  // recipeView.render(modal.state.recipe);
+  recipeView.update(modal.state.recipe);
+};
 const init = function () {
   recipeView.addHandlerRender(controlRecipe);
   searchView.addHandlerSearch(controlSearchResult);
   paginationView.addHandlerClick(controlPagination);
+  recipeView.addHandlerUpdateServings(controlServings);
 };
 init();

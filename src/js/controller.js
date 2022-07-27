@@ -20,6 +20,7 @@ const controlRecipe = async function () {
     bookmarksView.update(modal.state.bookmarks);
     // load recipe
     await modal.loadRecipe(hash);
+    console.log(modal.state.recipe);
     // render recipe
     recipeView.render(modal.state.recipe);
   } catch (e) {
@@ -69,6 +70,8 @@ const controlUpload = async function (newRecipe) {
     console.log(modal.state.recipe);
     recipeView.render(modal.state.recipe);
     addRecipeView.renderMessage();
+    bookmarksView.render(modal.state.bookmarks);
+    window.history.pushState(null, '', `#${modal.state.recipe.id}`);
     setTimeout(function () {
       addRecipeView.toggleWindow();
     }, MODAL_CLOSE_SEC * 1000);

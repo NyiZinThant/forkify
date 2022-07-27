@@ -70,7 +70,7 @@ class RecipeView extends View {
         </div>
       </div>
 
-      <div class="recipe__user-generated">
+      <div class="recipe__user-generated ${this._data.key ? '' : 'hidden'}">
         <svg>
           <use href="${icons}#icon-user"></use>
         </svg>
@@ -88,16 +88,6 @@ class RecipeView extends View {
       <h2 class="heading--2">Recipe ingredients</h2>
       <ul class="recipe__ingredient-list">
         ${this._data.ingredients.map(this._generateMarkupIngredient).join('')}
-        <li class="recipe__ingredient">
-          <svg class="recipe__icon">
-            <use href="${icons}#icon-check"></use>
-          </svg>
-          <div class="recipe__quantity">1000</div>
-          <div class="recipe__description">
-            <span class="recipe__unit">g</span>
-            pasta
-          </div>
-        </li>
       </ul>
     </div>
 
@@ -123,20 +113,22 @@ class RecipeView extends View {
     </div>
     `;
   }
-  _generateMarkupIngredient(el) {
+  _generateMarkupIngredient(ing) {
+    console.log(new Fraction(ing.quantity).toString());
     return `
     <li class="recipe__ingredient">
-        <svg class="recipe__icon">
+      <svg class="recipe__icon">
         <use href="${icons}#icon-check"></use>
-        </svg>
-        <div class="recipe__quantity">${
-          el.quantity ? new Fraction(el.quantity).toString() : ''
-        }</div>
-        <div class="recipe__description">
-            <span class="recipe__unit">${el.unit}</span>
-            ${el.description}
-        </div>
-    </li>`;
+      </svg>
+      <div class="recipe__quantity">${
+        ing.quantity ? new Fraction(ing.quantity).toString() : ''
+      }</div>
+      <div class="recipe__description">
+        <span class="recipe__unit">${ing.unit}</span>
+        ${ing.description}
+      </div>
+    </li>
+  `;
   }
 }
 

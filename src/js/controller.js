@@ -5,8 +5,10 @@ import searchView from './views/search.view.js';
 import resultsView from './views/results.view.js';
 import bookmarksView from './views/bookmarks.view.js';
 import paginationView from './views/pagination.view.js';
+import addRecipeView from './views/addRecipe.view.js';
 import * as modal from './modal.js';
 import { async } from 'regenerator-runtime';
+import { MODAL_CLOSE_SEC } from './config.js';
 
 const controlRecipe = async function () {
   try {
@@ -60,6 +62,21 @@ const controlBookmark = function () {
 const controlRenderBookmark = function () {
   bookmarksView.render(modal.state.bookmarks);
 };
+const controlUpload = async function (newRecipe) {
+  try {
+    addRecipeView.renderSpinner();
+    await modal.uploadRecipe(newRecipe);
+    console.log(modal.state.recipe);
+    recipeView.render(modal.state.recipe);
+    addRecipeView.renderMessage();
+    setTimeout(function () {
+      addRecipeView.toggleWindow();
+    }, MODAL_CLOSE_SEC * 1000);
+  } catch (error) {
+    console.error(error);
+    addRecipeView.renderError(error);
+  }
+};
 const init = function () {
   bookmarksView.addHandlerRender(controlRenderBookmark);
   recipeView.addHandlerRender(controlRecipe);
@@ -67,5 +84,6 @@ const init = function () {
   paginationView.addHandlerClick(controlPagination);
   recipeView.addHandlerUpdateServings(controlServings);
   recipeView.addHandlerBookmark(controlBookmark);
+  addRecipeView.addHandlerUpload(controlUpload);
 };
 init();
